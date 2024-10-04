@@ -41,8 +41,10 @@ def show_tasklist():
             else:
                 print(f"{tasklist[x]} ist noch fällig.")
             x += 1
+        print("-----\n")
+        print("Ihre Aufgabenliste endet hier.\n")
     else:
-        print("Deine Taskliste ist leer.")
+        print("Deine Taskliste ist leer.\n")
 
 # add_task()
 # show_tasklist()
