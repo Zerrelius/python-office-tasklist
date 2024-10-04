@@ -1,6 +1,7 @@
 # Dies ist ein Programm um eine Aufgabenliste zu erstellen und abzuarbeiten.
 from operator import itemgetter, attrgetter
 import csv
+from datetime import *
 
 # Aufgabenliste initialisieren
 tasklist = []
@@ -13,7 +14,7 @@ def add_task():
     while True:
         wantTimeLimit = input("\nMöchten Sie ein Fälligkeitsdatum hinzufügen? Bitte geben Sie 'Ja' oder 'Nein' ein.\n").capitalize()
         if wantTimeLimit == "Ja":
-            due_date = input("\nBis wann ist die Aufgabe fällig?\n")
+            due_date = input("\nBis wann ist die Aufgabe fällig?\nBitte geben Sie ein Datum ein. Format: Year-Month-Day Stunde:Minute:Sekunde\n")
             is_date = 1
             break
 
@@ -42,20 +43,25 @@ def show_tasklist():
         print("Ihre Aufgabenliste lautet:\n-----")
         x = 0
         sortedList = sorted(tasklist, key = itemgetter(1))
-        print(sortedList)
+
         for i in tasklist:
             type_list = str(type(tasklist[x]))
+
             if type_list == "<class 'list'>":
                 listLength = len(sortedList[x])
+
                 if listLength == 3:
-                    print(f"{sortedList[x][0]} ist {sortedList[x][1]} wichtig. Die Aufgabe ist in {sortedList[x][2]} fällig.")
+                    print(f"{sortedList[x][0]} ist {sortedList[x][1]} wichtig. Die Aufgabe ist am {sortedList[x][2]} fällig.")
+
                 elif listLength == 2:
                     print(f"{sortedList[x][0]} ist {sortedList[x][1]} wichtig.")
+
                 else:
                     print(f"{tasklist[x]} ist noch zutun.")
             x += 1
         print("-----")
         print("Ihre Aufgabenliste endet hier.\n")
+
     else:
         print("Deine Taskliste ist leer.\n")
 
@@ -70,11 +76,26 @@ def main():
         print("3. Aufgabenliste Exportieren")
         print("4. Programm beenden")
         print("-----")
+
+        if tasklist:
+            sortedList = sorted(tasklist, key = itemgetter(1))
+            current_date = datetime.now()
+            y = 0
+            for i in sortedList:
+                check_date = datetime.strptime(sortedList[y][2], '%Y-%m-%d %H:%M:%S')
+                if check_date <= current_date:
+                    activeTask = sortedList[y]
+                    print(f"{activeTask[0]} ist {activeTask[1]} wichtig. Die Aufgabe war am {activeTask[2]} fällig.")
+                y += 1
+
         choice = input("\nWas möchten Sie tun?\n")
+
         if choice == "1":
             add_task()
+
         elif choice == "2":
             show_tasklist()
+
         elif choice == "3":
             with open('Task-List-Export', 'w') as f:
                 # using csv.writer method from CSV Package
@@ -83,9 +104,11 @@ def main():
                 write.writerow(fields)
                 sortedList = sorted(tasklist, key = itemgetter(1))
                 write.writerows(sortedList)
+
         elif choice == "4":
             print("Das Programm wird beendet. Auf Wiedersehen!")
             break
+
         else:
             print("Bitte geben Sie nur 1, 2, 3 oder 4 ein.")
 
