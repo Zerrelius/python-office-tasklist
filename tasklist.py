@@ -1,5 +1,6 @@
 # Dies ist ein Programm um eine Aufgabenliste zu erstellen und abzuarbeiten.
 from operator import itemgetter, attrgetter
+import csv
 
 # Aufgabenliste initialisieren
 tasklist = []
@@ -63,10 +64,11 @@ def show_tasklist():
 
 def main():
     while True:
-        print("----- Office - Taskliste -----")
+        print("\n----- Office - Taskliste -----")
         print("1. Eine Aufgabe der Liste hinzufügen")
         print("2. Aufgabenliste zeigen")
-        print("3. Programm beenden")
+        print("3. Aufgabenliste Exportieren")
+        print("4. Programm beenden")
         print("-----")
         choice = input("\nWas möchten Sie tun?\n")
         if choice == "1":
@@ -74,10 +76,18 @@ def main():
         elif choice == "2":
             show_tasklist()
         elif choice == "3":
+            with open('Task-List-Export', 'w') as f:
+                # using csv.writer method from CSV Package
+                write = csv.writer(f)
+                fields = ['Tasks', 'Prioritys', 'Due-Time']
+                write.writerow(fields)
+                sortedList = sorted(tasklist, key = itemgetter(1))
+                write.writerows(sortedList)
+        elif choice == "4":
             print("Das Programm wird beendet. Auf Wiedersehen!")
             break
         else:
-            print("Bitte geben Sie nur 1, 2 oder 3 ein.")
+            print("Bitte geben Sie nur 1, 2, 3 oder 4 ein.")
 
 if __name__ == "__main__":
     main()
