@@ -5,30 +5,35 @@ tasklist = []
 
 # Eine Funktion um eine Aufgabe der Liste hinzuzufügen
 def add_task():
+    is_date = 0
     task = input("Welche Aufgabe soll hinzugefügt werden?\n")
 
     while True:
         wantTimeLimit = input("\nMöchten Sie ein Fälligkeitsdatum hinzufügen? Bitte geben Sie 'Ja' oder 'Nein' ein.\n").capitalize()
         if wantTimeLimit == "Ja":
             due_date = input("\nBis wann ist die Aufgabe fällig?\n")
-            # task_data = {
-            #     'task': task,
-            #     'due_date': due_date,
-            #     # 'priority': priority
-            # }
-            task_data = [task, due_date]
-            tasklist.append(task_data)
-            print(f"\nSie haben {task} der Aufgabenliste hinzugefügt. Die Aufgabe ist bis {due_date} zu erledigen.\n")
+            is_date = 1
             break
 
         elif wantTimeLimit == "Nein":
-            print("\nIhrer Aufgabe wurd kein Fälligkeitsdatum hinzugefügt.")
-            tasklist.append(task)
-            print(f"\nSie haben {task} der Aufgabenliste hinzugefügt. Ohne Fälligkeitsdatum.\n")
             break
 
         else:
             print("\nBitte geben Sie nur 'Ja' oder 'Nein ein.")
+
+    while True:
+        priority = input("\nWelche Priorität möchten Sie der Aufgabe zuweisen? Beispiele: Hoch, Mittel und Niedrig\n")
+
+        if is_date == 1:
+            task_data = [task, priority, due_date]
+            tasklist.append(task_data)
+            print(f"\nSie haben {task} der Aufgabenliste hinzugefügt. Die Aufgabe ist bis {due_date} zu erledigen. Sie haben der Aufgabe eine {priority} gegeben.\n")
+            break
+        else:
+            task_data = [task, priority]
+            tasklist.append(task_data)
+            print(f"\nSie haben {task} der Aufgabenliste hinzugefügt. Ohne Fälligkeitsdatum. Mit der Priorität {priority} hinzugefügt.\n")
+            break
 
 def show_tasklist():
     if tasklist:
@@ -36,12 +41,17 @@ def show_tasklist():
         x = 0
         for i in tasklist:
             type_list = str(type(tasklist[x]))
+            tasklist.sort(key = len([x][1]))
             if type_list == "<class 'list'>":
-                print(f"{tasklist[x][0]} ist in {tasklist[x][1]} fällig.")
-            else:
-                print(f"{tasklist[x]} ist noch fällig.")
+                listLength = len(tasklist[x])
+                if listLength == 3:
+                    print(f"{tasklist[x][0]} ist in {tasklist[x][1]} fällig. Die Priorität ist {tasklist[x][2]}.")
+                elif listLength == 2:
+                    print(f"{tasklist[x][0]} ist {tasklist[x][1]} wichtig.")
+                else:
+                    print(f"{tasklist[x]} ist noch zutun.")
             x += 1
-        print("-----\n")
+        print("-----")
         print("Ihre Aufgabenliste endet hier.\n")
     else:
         print("Deine Taskliste ist leer.\n")
