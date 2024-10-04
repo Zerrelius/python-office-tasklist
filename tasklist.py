@@ -1,4 +1,5 @@
 # Dies ist ein Programm um eine Aufgabenliste zu erstellen und abzuarbeiten.
+from operator import itemgetter, attrgetter
 
 # Aufgabenliste initialisieren
 tasklist = []
@@ -39,15 +40,16 @@ def show_tasklist():
     if tasklist:
         print("Ihre Aufgabenliste lautet:\n-----")
         x = 0
+        sortedList = sorted(tasklist, key = itemgetter(1))
+        print(sortedList)
         for i in tasklist:
             type_list = str(type(tasklist[x]))
-            tasklist.sort(key = len([x][1]))
             if type_list == "<class 'list'>":
-                listLength = len(tasklist[x])
+                listLength = len(sortedList[x])
                 if listLength == 3:
-                    print(f"{tasklist[x][0]} ist in {tasklist[x][1]} fällig. Die Priorität ist {tasklist[x][2]}.")
+                    print(f"{sortedList[x][0]} ist {sortedList[x][1]} wichtig. Die Aufgabe ist in {sortedList[x][2]} fällig.")
                 elif listLength == 2:
-                    print(f"{tasklist[x][0]} ist {tasklist[x][1]} wichtig.")
+                    print(f"{sortedList[x][0]} ist {sortedList[x][1]} wichtig.")
                 else:
                     print(f"{tasklist[x]} ist noch zutun.")
             x += 1
